@@ -27,7 +27,18 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet weak var nextEvoImg: UIImageView!
     
     override func viewDidLoad() {
+        pokemonImg.image = UIImage(named: "\(pokemon.pokedexID)")
+        currentEvoImg.image = UIImage(named: "\(pokemon.pokedexID)")
+        nextEvoImg.isHidden = true
+        nameLbl.text = pokemon.name.capitalized
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+
+        pokemon.downloadDetails {
+            self.updateUI()
+        }
 
     }
     
@@ -37,6 +48,25 @@ class PokemonDetailVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func updateUI() {
+        attackLbl.text = pokemon.attack
+        defenseLbl.text = pokemon.defense
+        heightLbl.text = pokemon.height
+        weightLbl.text = pokemon.weight
+        idLbl.text = String(pokemon.pokedexID)
+        typeLbl.text = pokemon.type
+        descriptionLbl.text = pokemon.description
+        nextEvoLbl.text = pokemon.nextEvoText
+        if pokemon.nextEvoID != "" {
+            nextEvoLbl.text = "Next Evolution: \(pokemon.nextEvoName) LVL \(pokemon.nextEvoLvl)"
+            nextEvoImg.isHidden = false
+            nextEvoImg.image = UIImage(named: "\(pokemon.nextEvoID)")
+        } else {
+            nextEvoLbl.text = "No Evolution"
+        }
+
     }
     
 
